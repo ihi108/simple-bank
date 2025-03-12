@@ -18,4 +18,6 @@ test:
 	go test -v -cover ./...
 cleardb:
 	make migratedown && make migrateup
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc test cleardb
+server:
+	go run main.go
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc test cleardb server
