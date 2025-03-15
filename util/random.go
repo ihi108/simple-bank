@@ -38,7 +38,7 @@ func RandomMoney() int64 {
 // RandomCurrency generates a random currency
 func RandomCurrency() string {
 	currencies := []string{
-		"EUR", "USD", "CAD", "NGR",
+		EUR, USD, CAD,
 	}
 
 	n := len(currencies)
