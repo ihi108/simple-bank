@@ -24,16 +24,8 @@ func main() {
 	runDBMigration(config.MigrationURL, config.DBSource)
 
 	store := db.NewStore(conn)
-	server, err := api.NewServer(config, store)
-	if err != nil {
-		log.Fatal("cannot create server: ", err)
-	}
 
-	err = server.Start(config.ServerAddress)
-
-	if err != nil {
-		log.Fatal("cannot start server: ", err)
-	}
+	runGinServer(config, store)
 }
 
 func runDBMigration(migrationURL string, DBSource string) {
@@ -46,4 +38,17 @@ func runDBMigration(migrationURL string, DBSource string) {
 	}
 
 	log.Println("db migrated successfully")
+}
+
+func runGinServer(config util.Config, store db.Store) {
+	server, err := api.NewServer(config, store)
+	if err != nil {
+		log.Fatal("cannot create server: ", err)
+	}
+
+	err = server.Start(config.ServerAddress)
+
+	if err != nil {
+		log.Fatal("cannot start server: ", err)
+	}
 }
