@@ -31,4 +31,9 @@ server:
 	go run main.go
 mock:
 	mockgen -package mockdb -destination db/mock/store.go simple-bank/db/sqlc Store
-.PHONY: postgres createdb dropdb migrateup migrateup1 migratedown migratedown1 sqlc test cleardb server mock
+proto:
+	rm pb/*.go
+	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
+    --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
+    proto/*.proto
+.PHONY: postgres createdb dropdb migrateup migrateup1 migratedown migratedown1 sqlc test cleardb server mock proto
