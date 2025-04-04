@@ -49,12 +49,15 @@ func (server *Server) LoginUser(
 		return nil, status.Errorf(codes.Internal, "Failed to create refresh token: %s", err)
 	}
 
+	// extracts grpc request metadata from context
+	mtdt := server.extractMetaData(ctx)
+
 	session, err := server.store.CreateSession(ctx, db.CreateSessionParams{
 		ID:           refreshPayload.ID,
 		Username:     user.Username,
 		RefreshToken: refereshToken,
-		UserAgent:    "",
-		ClientIp:     "",
+		UserAgent:    mtdt.UserAgent,
+		ClientIp:     mtdt.ClientIP,
 		IsBlocked:    false,
 		ExpiresAt:    refreshPayload.ExpiredAt,
 	})
