@@ -110,6 +110,7 @@ func runGatewayServer(config util.Config, store db.Store) {
 	grpcMux := runtime.NewServeMux(jsonOption)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+	// perform in process translation between grpc and http
 	err = pb.RegisterSimpleBankHandlerServer(ctx, grpcMux, server)
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot register handler server")
@@ -129,8 +130,10 @@ func runGatewayServer(config util.Config, store db.Store) {
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot create listener")
 	}
+
 	log.Info().Msgf("start HTTP gateway server at %s", listener.Addr().String())
-	err = http.Serve(listener, mux)
+	handler := gapi.HttpLogger(mux)
+	err = http.Serve(listener, handler)
 	if err != nil {
 		log.Fatal().Err(err).Msg("cannot start HTTP gateway server")
 	}
