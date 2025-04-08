@@ -46,6 +46,8 @@ func (server *Server) CreateUser(
 
 	}
 
+	// send verify email
+
 	rsp := &pb.CreateUserResponse{
 		User: convertUser(user),
 	}
